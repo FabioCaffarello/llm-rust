@@ -14,8 +14,9 @@ echo "<h1>Workspace Documentation</h1><ul>" >> "$INDEX_PAGE"
 find libs apps -name Cargo.toml | while read cargo_toml; do
     CRATE_DIR=$(dirname "$cargo_toml")
     CRATE_NAME=$(basename "$CRATE_DIR")
+    CRATE_ID=$(echo "$CRATE_NAME" | tr '-' '_')
     # Link to the crate's documentation
-    echo "<li><a href='./$CRATE_NAME/index.html'>$CRATE_NAME</a></li>" >> "$INDEX_PAGE"
+    echo "<li><a href='./$CRATE_ID/index.html'>$CRATE_NAME</a></li>" >> "$INDEX_PAGE"
 done
 
 echo "</ul></body></html>" >> "$INDEX_PAGE"
