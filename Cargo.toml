@@ -2,5 +2,5 @@
 
 members = [ 
     "./apps/playground",
-    "./libs/resources/rs-minio", "apps/playground", 
+    "./libs/resources/rs-minio", 
 ]
