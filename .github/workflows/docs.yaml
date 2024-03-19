@@ -26,9 +26,7 @@ jobs:
       - name: Clean docs folder
         run: cargo clean --doc
       - name: Build docs
-        run: cargo doc --no-deps
-      - name: Add redirect
-        run: echo '<meta http-equiv="refresh" content="0;url=doc/rs_minio/index.html">' > target/doc/index.html
+        run: make generate-docs
       - name: Remove lock file
         run: rm target/doc/.lock
       - name: Upload artifact

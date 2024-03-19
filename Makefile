@@ -34,6 +34,12 @@ check-integration: start
 open-doc:
 	$(CARGO_CMD) doc --no-deps --open
 
+build-doc:
+	$(CARGO_CMD) doc --no-deps
+
+generate-docs: build-doc
+	. hack/generate-doc.sh
+
 format:
 	$(CARGO_CMD) fmt --quiet
 
