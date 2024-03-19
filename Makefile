@@ -32,7 +32,7 @@ check-integration: start
 	. hack/check-integration.sh $(project)
 
 open-doc:
-	$(CARGO_CMD) doc --no-depsa --open
+	$(CARGO_CMD) doc --no-deps --open
 
 format:
 	$(CARGO_CMD) fmt --quiet
