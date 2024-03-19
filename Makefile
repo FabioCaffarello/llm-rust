@@ -25,8 +25,11 @@ new-project: guard-project_type
 start:
 	$(DOCKER_COMPOSE_CMD) up -d
 
-check-integration: guard-project start
+check-integration-bk: guard-project start
 	$(CARGO_CMD) test -p $(project) --test integration_test
+
+check-integration: start
+	. hack/check-integration.sh $(project)
 
 open-doc:
 	$(CARGO_CMD) doc --no-depsa --open
