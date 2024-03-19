@@ -7,8 +7,8 @@ DOCS_DIR="target/doc"
 INDEX_PAGE="$DOCS_DIR/index.html"
 
 # Find the CSS files
-NORMALIZE_CSS=$(find $DOCS_DIR -type f -name 'normalize-*.css' | head -n 1)
-RUSTDOC_CSS=$(find $DOCS_DIR -type f -name 'rustdoc-*.css' | head -n 1)
+# NORMALIZE_CSS=$(find $DOCS_DIR -type f -name 'normalize-*.css' | head -n 1)
+# RUSTDOC_CSS=$(find $DOCS_DIR -type f -name 'rustdoc-*.css' | head -n 1)
 
 # Convert absolute paths to relative paths
 NORMALIZE_CSS_REL="./${NORMALIZE_CSS#$DOCS_DIR/}"
@@ -22,8 +22,8 @@ RUSTDOC_CSS_REL="./${RUSTDOC_CSS#$DOCS_DIR/}"
     echo "    <meta charset=\"utf-8\">"
     echo "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
     echo "    <title>Workspace Documentation - Rust</title>"
-    echo "    <link rel=\"stylesheet\" href=\"$NORMALIZE_CSS_REL\">"
-    echo "    <link rel=\"stylesheet\" href=\"$RUSTDOC_CSS_REL\">"
+    # echo "    <link rel=\"stylesheet\" href=\"$NORMALIZE_CSS_REL\">"
+    # echo "    <link rel=\"stylesheet\" href=\"$RUSTDOC_CSS_REL\">"
     echo "  </head>"
     echo "  <body class=\"rustdoc\">"
     echo "    <main>"
