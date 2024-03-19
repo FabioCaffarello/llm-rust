@@ -10,11 +10,24 @@ use std::error::Error;
 use std::io::Write;
 use tempfile::NamedTempFile;
 
+/// A client for interacting with MinIO using in-memory buffers.
 pub struct MinioBufferClient {
     client: Client,
 }
 
 impl MinioBufferClient {
+    /// Creates a new `MinioBufferClient` instance.
+    ///
+    /// # Arguments
+    ///
+    /// * `endpoint` - The URL to the MinIO service.
+    /// * `access_key` - Your MinIO access key.
+    /// * `secret_key` - Your MinIO secret key.
+    ///
+    /// # Returns
+    ///
+    /// A result containing the new `MinioBufferClient` instance or an error if the client
+    /// could not be created.
     pub async fn new(
         endpoint: &str,
         access_key: &str,
@@ -27,6 +40,17 @@ impl MinioBufferClient {
         Ok(Self { client })
     }
 
+    /// Ensures that a bucket exists in the MinIO service.
+    ///
+    /// If the bucket does not exist, it is created. If it already exists, the function does nothing.
+    ///
+    /// # Arguments
+    ///
+    /// * `bucket` - The name of the bucket to check or create.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or an error if the bucket could not be checked or created.
     pub async fn ensure_bucket_exists(
         &self,
         bucket: &str,
@@ -52,6 +76,17 @@ impl MinioBufferClient {
         Ok(())
     }
 
+    /// Uploads a buffer as an object to a specified bucket.
+    ///
+    /// # Arguments
+    ///
+    /// * `bucket` - The name of the target bucket.
+    /// * `object_name` - The name of the object to create.
+    /// * `buffer` - The data to upload as the object.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or an error if the upload failed.
     pub async fn upload_from_buffer(
         &self,
         bucket: &str,
@@ -73,6 +108,16 @@ impl MinioBufferClient {
         Ok(())
     }
 
+    /// Downloads an object from a specified bucket into a buffer.
+    ///
+    /// # Arguments
+    ///
+    /// * `bucket` - The name of the bucket.
+    /// * `object_name` - The name of the object to download.
+    ///
+    /// # Returns
+    ///
+    /// A result containing the downloaded data as `Bytes` or an error if the download failed.
     pub async fn download_to_buffer(
         &self,
         bucket: &str,
@@ -84,42 +129,61 @@ impl MinioBufferClient {
         Ok(bytes)
     }
 
+    /// Deletes an object from a specified bucket.
+    ///
+    /// # Arguments
+    ///
+    /// * `bucket` - The name of the bucket.
+    /// * `object_name` - The name of the object to delete.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or an error if the deletion failed.
     pub async fn delete_object(
         &self,
         bucket: &str,
         object_name: &str,
     ) -> Result<(), Box<dyn Error + Send + Sync>> {
-        // Properly handle the Result here, unwrapping the actual arguments on success
         let args = RemoveObjectArgs::new(bucket, object_name)?;
-        // Pass the unwrapped args reference directly
         self.client.remove_object(&args).await?;
         Ok(())
     }
 
+    /// Deletes a specified bucket.
+    ///
+    /// # Arguments
+    ///
+    /// * `bucket` - The name of the bucket to delete.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or an error if the bucket could not be deleted.
     pub async fn delete_bucket(&self, bucket: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
-        // Properly handle the Result here, unwrapping the actual arguments on success
         let args = RemoveBucketArgs::new(bucket)?;
-        // Pass the unwrapped args reference directly
         self.client.remove_bucket(&args).await?;
         Ok(())
     }
 
+    /// Lists all objects in a specified bucket.
+    ///
+    /// # Arguments
+    ///
+    /// * `bucket` - The name of the bucket.
+    ///
+    /// # Returns
+    ///
+    /// A result containing a vector of object names or an error if the listing failed.
     pub async fn list_objects(
         &self,
         bucket: &str,
     ) -> Result<Vec<String>, Box<dyn Error + Send + Sync>> {
-        // Attempt to create the arguments for listing objects in the bucket
         let list_obj_args = ListObjectsV2Args::new(bucket)
             .map_err(|e| format!("Failed to create ListObjectsV2Args: {}", e))?;
-
-        // Call the list_objects_v2 method of the MinIO client library
         let response = self.client.list_objects_v2(&list_obj_args).await?;
-
-        // Extract the names of the objects from the response
         let object_names: Vec<String> = response
             .contents
             .iter()
-            .map(|entry| entry.name.clone()) // Corrected field name to 'name'
+            .map(|entry| entry.name.clone())
             .collect();
 
         Ok(object_names)

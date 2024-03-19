@@ -3,7 +3,6 @@ use rs_minio::MinioBufferClient;
 use std::error::Error;
 use uuid::Uuid;
 
-
 struct TestEnvironment {
     client: MinioBufferClient,
     bucket: String,
@@ -88,7 +87,6 @@ async fn test_list_objects() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     let content = b"Hello, MinIO!";
 
-    // Upload a couple of objects to list later
     let object_names = vec!["1", "2", "3"];
     for object_name_suffix in &object_names {
         let object_name = format!("test-object-{}", object_name_suffix);
@@ -123,7 +121,7 @@ async fn test_download_non_existent_object() -> Result<(), Box<dyn Error + Send 
         .await;
 
     assert!(
-        matches!(result, Err(_)),
+        result.is_err(),
         "Expected an error for non-existent object download"
     );
     Ok(())
