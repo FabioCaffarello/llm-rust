@@ -1,0 +1,9 @@
+[package]
+name = "rs_rabbitmq"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+amqprs = "1.5.2"
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1" 

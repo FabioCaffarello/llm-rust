@@ -37,7 +37,7 @@ open-doc:
 build-doc:
 	$(CARGO_CMD) doc --no-deps
 
-generate-docs: build-doc
+generate-docs:
 	. hack/generate-doc.sh
 
 format:
@@ -45,6 +45,9 @@ format:
 
 lint:
 	. hack/lint.sh
+
+stop:
+	docker-compose down -v
 
 rust-version:
 	@echo "Rust command-line utility versions:"

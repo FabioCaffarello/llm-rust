@@ -25,6 +25,15 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Clean docs folder
         run: cargo clean --doc
+
+        
+      - name: Build Documentation
+        run: cargo +nightly doc --no-deps --workspace -F full
+        env:
+          RUSTDOCFLAGS: "--cfg docsrs"
+          RUSTFLAGS: "--cfg docsrs"
+
+
       - name: Build docs
         run: make generate-docs
       - name: Remove lock file
